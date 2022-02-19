@@ -4,6 +4,8 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
+
+
         Scanner sc = new Scanner(System.in);
         System.out.println("1. Delete\n2. Add\n3. Update");
 
@@ -20,5 +22,11 @@ public class Main {
                 System.out.println("3");
                 break;
         }
+
+        Library library = new Library();
+        library.connect();
+        library.addBook(1,"Ohota", "Haruki",
+                "Roman",
+                "«Opisanie");
     }
 }
