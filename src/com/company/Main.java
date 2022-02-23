@@ -15,8 +15,17 @@ public class Main {
             n = sc.nextInt();
             switch (n) {
                 case 1:
-                    System.out.println("Insert id, name, author and genre with the Enter");
-                    library.addBook(sc.nextInt(), sc.next(), sc.next(), sc.next());
+                    System.out.println("Insert id");
+                    int id = sc.nextInt();
+                    System.out.println("Insert name");
+                    String name = sc.next();
+                    System.out.println("Insert author");
+                    String author = sc.next();
+                    System.out.println("Insert genre");
+                    String genre = sc.next();
+                    System.out.println("Insert description (Not mandatory)");
+                    String description = sc.next();
+                    library.addBook(id, name, author, genre, description);
                     break;
                 case 2:
                     System.out.println("Insert book's id or name");
@@ -39,4 +48,4 @@ public class Main {
             library.connect();
         }
     }
-} //testt
+}
