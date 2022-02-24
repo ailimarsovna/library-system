@@ -24,7 +24,7 @@ public class Library {
         try {
             stmt = c.createStatement();
             String sql = "INSERT INTO books VALUES(" + id + ", '" + name +
-                    "', '" + author + "', '" + genre + "', '" + description + "')";
+                    "', '" + author + "', '" + genre + "', '" + description + "', true" + ")";
             stmt.executeUpdate(sql);
             stmt.close();
             c.close();
@@ -60,22 +60,46 @@ public class Library {
         }
     }
 
+    public void showBooks() {
+        try {
+            String sql = "SELECT * FROM books";
+            ps = c.prepareStatement(sql);
+            rs = ps.executeQuery();
+            System.out.println("id\t|\tname\t|\tauthor\t|\tgenre\t|\tdescription\t|\tavailability");
+            while (rs.next()) {
+                int id = rs.getInt("book_id");
+                String name = rs.getString("name");
+                String author = rs.getString("author");
+                String genre = rs.getString("genre");
+                String description = rs.getString("description");
+                String availability = rs.getString("availability");
+                System.out.println(id + "\t|\t" + name
+                        + "\t|\t" + author + "\t|\t" + genre + "\t|\t" + description+ "\t|\t" + availability);
+            }
+        }
+        catch(Exception e){
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+    }
+
     public void showBookInfo(int id) {
         try {
-            String sql = "SELECT * FROM books WHERE id = " + id;
+            String sql = "SELECT * FROM books WHERE book_id = " + id;
             ps = c.prepareStatement(sql);
             rs = ps.executeQuery();
 
 
-            System.out.println("id\t|\tname\t|\tauthor\t|\tgenre");
+            System.out.println("id\t|\tname\t|\tauthor\t|\tgenre\t|\tdescription\t|\tavailability");
             while (rs.next()) {
 
-                int id1 = rs.getInt("id");
                 String name = rs.getString("name");
                 String author = rs.getString("author");
                 String genre = rs.getString("genre");
-                System.out.println(id1 + "\t|\t" + name
-                        + "\t|\t" + author + "\t|\t" + genre);
+                String description = rs.getString("description");
+                String availability = rs.getString("availability");
+                System.out.println(id + "\t|\t" + name
+                        + "\t|\t" + author + "\t|\t" + genre + "\t|\t" + description+ "\t|\t" + availability);
             }
 
         } catch (Exception e) {
@@ -83,24 +107,53 @@ public class Library {
             System.exit(0);
         }
     }
-
-    public void showBookInfo(String name) {
+public void showBookInfo(String name) {
         try {
             String sql = "SELECT * FROM books WHERE name = '" + name + "'";
             ps = c.prepareStatement(sql);
             rs = ps.executeQuery();
-            System.out.println("id\t|\tname\t|\tauthor\t|\tgenre");
+            System.out.println("id\t|\tname\t|\tauthor\t|\tgenre\t|\tdescription\t|\tavailability");
             while (rs.next()) {
 
-                int id = rs.getInt("id");
-                String name1 = rs.getString("name");
+                int id = rs.getInt("book_id");
                 String author = rs.getString("author");
                 String genre = rs.getString("genre");
-                System.out.println(id + "\t|\t" + name1
-                        + "\t|\t" + author + "\t|\t" + genre);
+                String description = rs.getString("description");
+                String availability = rs.getString("availability");
+                System.out.println(id + "\t|\t" + name
+                        + "\t|\t" + author + "\t|\t" + genre + "\t|\t" + description+ "\t|\t" + availability);
             }
         }
         catch(Exception e){
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+    }
+
+    public void takeABook(int accounting_id, int stud_id, String stud_name, int book_id) {
+        try {
+            stmt = c.createStatement();
+            String sql = "INSERT INTO books_accounting VALUES (" + accounting_id + ", " + stud_id + ", '" + stud_name + "', " + book_id + ");" +
+                    "UPDATE books as b SET availability = false FROM books_accounting as ba " +
+                    " WHERE ba.book_id = b.book_id AND accounting_id = " + accounting_id;
+            stmt.executeUpdate(sql);
+            stmt.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+    }
+    public void returnBook(int accounting_id) {
+        try {
+            stmt = c.createStatement();
+            String sql = "UPDATE books as b SET availability = true FROM books_accounting as ba " +
+                    " WHERE b.book_id = ba.book_id AND accounting_id = " + accounting_id + ";" +
+                    "DELETE FROM books_accounting WHERE accounting_id = " + accounting_id;
+            stmt.executeUpdate(sql);
+            stmt.close();
+            c.close();
+        } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         }
