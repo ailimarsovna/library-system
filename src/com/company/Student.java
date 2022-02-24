@@ -96,4 +96,32 @@ public class Student implements Human{
             System.exit(0);
         }
     }
+    public void takeABook(int accounting_id, int stud_id, String stud_name, int book_id) {
+        try {
+            stmt = c.createStatement();
+            String sql = "INSERT INTO books_accounting VALUES (" + accounting_id + ", " + stud_id + ", '" + stud_name + "', " + book_id + ");" +
+                    "UPDATE books as b SET availability = false FROM books_accounting as ba " +
+                    " WHERE ba.book_id = b.book_id AND accounting_id = " + accounting_id;
+            stmt.executeUpdate(sql);
+            stmt.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+    }
+    public void returnBook(int accounting_id) {
+        try {
+            stmt = c.createStatement();
+            String sql = "UPDATE books as b SET availability = true FROM books_accounting as ba " +
+                    " WHERE b.book_id = ba.book_id AND accounting_id = " + accounting_id + ";" +
+                    "DELETE FROM books_accounting WHERE accounting_id = " + accounting_id;
+            stmt.executeUpdate(sql);
+            stmt.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+    }
 }
