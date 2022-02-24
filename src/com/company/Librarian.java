@@ -96,4 +96,43 @@ public class Librarian implements Human{
             System.exit(0);
         }
     }
+    public void addBook(int id, String name, String author, String genre, String description) {
+        try {
+            stmt = c.createStatement();
+            String sql = "INSERT INTO books VALUES(" + id + ", '" + name +
+                    "', '" + author + "', '" + genre + "', '" + description + "', true" + ")";
+            stmt.executeUpdate(sql);
+            stmt.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+    }
+
+    public void deleteBook(int id) {
+        try {
+            stmt = c.createStatement();
+            String sql = "DELETE FROM books WHERE id = " + id;
+            stmt.executeUpdate(sql);
+            stmt.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+    }
+
+    public void deleteBook(String name) {
+        try {
+            stmt = c.createStatement();
+            String sql = "DELETE FROM books WHERE name = '" + name + "'";
+            stmt.executeUpdate(sql);
+            stmt.close();
+            c.close();
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+    }
 }
